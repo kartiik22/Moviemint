@@ -4,7 +4,7 @@ import { useState } from "react"
 import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import axios from "axios"
-
+import PaymentPage from "./pages/PaymentPage";
 
 import { login, logout } from "./slices/authSlice"
 import Login from "./pages/Login";
@@ -51,6 +51,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/show/:id" element={<NetflixShowPage />} />
+          
+
+<Route path="/buy" element={<PaymentPage />} />
+
         </Routes>
       </BrowserRouter>
 

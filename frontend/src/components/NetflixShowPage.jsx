@@ -39,10 +39,21 @@ function NetflixShowPage() {
   const fetchShow = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`http://localhost:4000/api/shows/${id}`)
+  
+      // Get the token from localStorage or your Redux state
+      const token = localStorage.getItem("token") // or from Redux if you're using that
+  
+      const response = await fetch(`http://localhost:4000/api/shows/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+  
       if (!response.ok) {
         throw new Error("Failed to fetch show")
       }
+  
       const data = await response.json()
       setShow(data)
     } catch (err) {
@@ -52,6 +63,7 @@ function NetflixShowPage() {
       setLoading(false)
     }
   }
+  
 
   const handleImageError = (e) => {
     e.target.src = `https://via.placeholder.com/1200x800/333/fff?text=No+Image`

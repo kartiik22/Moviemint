@@ -6,11 +6,18 @@ const showRoutes = require("./routes/showRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const authRoutes = require("./routes/authRoutes");
 dotenv.config();
+const paymentRoutes = require("./routes/paymentRoutes");
 const app = express();
 
 // Middleware
-app.use(cors()); // Enable CORS for all routes
-app.use(express.json());
+app.use(cors());           // Enable CORS for all routes
+app.use(express.json());   // Parse JSON body for all routes
+
+// Routes
+app.use("/api/payment", paymentRoutes);
+app.use("/api/shows", showRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/auth", authRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
@@ -20,10 +27,6 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log("MongoDB connected"))
 .catch((err) => console.error("MongoDB connection error:", err));
 
-// Routes
-app.use("/api/shows", showRoutes);           // Public
-app.use("/api/admin", adminRoutes);          // Admin-only
-app.use("/api/auth" , authRoutes);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
