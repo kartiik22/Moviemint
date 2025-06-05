@@ -1,7 +1,5 @@
 const Show = require("../models/showModel");
-
-// Get all shows (public)
-const User = require("../models/User"); // Import this at top if not already
+const User = require("../models/User");
 
 const getShows = async (req, res) => {
   try {
@@ -47,9 +45,6 @@ const getShows = async (req, res) => {
   }
 };
 
-// Get single show by ID (include url field for all users)
-
-
 const getShowById = async (req, res) => {
   console.log("🎬 getShowById: Called");
   console.log("🎬 getShowById: req.params.id =", req.params.id);
@@ -74,8 +69,28 @@ const getShowById = async (req, res) => {
       const user = await User.findById(req.user.userId);
       console.log("📦 User from DB:", user);
 
-      if (user?.isPaid) {
-        console.log("💰 Paid user: Full access");
+      // Check if subscription is still valid (within 30 days)
+      if (user?.isPaid && user?.subscriptionTime) {
+        const now = new Date();
+        const subscriptionDate = new Date(user.subscriptionTime);
+        const daysDifference = Math.floor((now - subscriptionDate) / (1000 * 60 * 60 * 24));
+        
+        console.log(`📅 Subscription date: ${subscriptionDate}`);
+        console.log(`📅 Days since subscription: ${daysDifference}`);
+
+        if (daysDifference >= 30) {
+          console.log("⏰ Subscription expired! Setting isPaid to false");
+          // Subscription expired, set isPaid to false
+          await User.findByIdAndUpdate(req.user.userId, { isPaid: false });
+          console.log("❌ Expired subscription: Hiding URL");
+          show = await Show.findById(showId).select("-url");
+        } else {
+          console.log("💰 Valid subscription: Full access");
+          show = await Show.findById(showId);
+        }
+      } else if (user?.isPaid) {
+        // isPaid is true but no subscriptionTime (shouldn't happen with new logic)
+        console.log("⚠️ isPaid true but no subscriptionTime, giving access");
         show = await Show.findById(showId);
       } else {
         console.log("❌ Unpaid user: Hiding URL");
@@ -103,25 +118,24 @@ const getShowById = async (req, res) => {
   }
 };
 
-module.exports = { getShowById };
-
 // Create a new show (admin only)
 const createShow = async (req, res) => {
-  const { name, image, rating, description , url } = req.body;
+  const { name, image, rating, description, url } = req.body;
 
   if (!name || !image || !rating || !description || !url) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
-    const newShow = new Show({ name, image, rating, description , url });
+    const newShow = new Show({ name, image, rating, description, url });
     const savedShow = await newShow.save();
     res.status(201).json(savedShow);
   } catch (error) {
-    console.error(error); // 
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 // Update a show (admin only)
 const updateShow = async (req, res) => {
   const showId = req.params.id;

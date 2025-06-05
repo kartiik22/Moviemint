@@ -93,7 +93,7 @@ const SubscriptionPage = () => {
         key: "rzp_test_iq3XMe66YUCq07", // Replace with your actual Razorpay key or use env variable
         amount: order.amount,
         currency: "INR",
-        name: "My Video App",
+        name: "MOVIEMINT",
         description: "Subscription Payment",
         order_id: order.id,
         handler: async (response) => {
@@ -592,7 +592,7 @@ const SubscriptionPage = () => {
       `}</style>
 
       <div className="header">
-        <div className="logo">VIDEOFLIX</div>
+        <div className="logo">MOVIEMINT</div>
       </div>
 
       <div className="subscription-container">

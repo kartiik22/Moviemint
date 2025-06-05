@@ -2,7 +2,6 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const User = require("../models/User");
 
-
 const razorpay = new Razorpay({
   key_id: "rzp_test_iq3XMe66YUCq07",
   key_secret: "yF6BlaYSzMnxucE1HHnS9Dtv",
@@ -36,7 +35,11 @@ const verifyPayment = async (req, res) => {
     .digest("hex");
 
   if (hmac === razorpay_signature) {
-    await User.findByIdAndUpdate(userId, { isPaid: true });
+    // Set isPaid to true and record subscription time
+    await User.findByIdAndUpdate(userId, { 
+      isPaid: true,
+      subscriptionTime: new Date() // Record when subscription was purchased
+    });
     res.json({ success: true });
   } else {
     res.status(400).json({ error: "Payment verification failed" });

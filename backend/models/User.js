@@ -4,9 +4,9 @@ const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  firstName: { type: String, default: "" },       // Optional field
-  lastName: { type: String, default: "" },        // Optional field
-  isPaid: { type: Boolean, default: false }       // Default false
+  firstName: { type: String, default: "" },
+  lastName: { type: String, default: "" },
+  isPaid: { type: Boolean, default: false },
+  subscriptionTime: { type: Date, default: null }  // When subscription was purchased
 });
-
 module.exports = mongoose.model("User", UserSchema);
