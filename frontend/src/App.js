@@ -1,7 +1,6 @@
-
 import Signup from './pages/Signup'; 
 import { useState } from "react"
-import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Link, useNavigate, Navigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import axios from "axios"
 import PaymentPage from "./pages/PaymentPage";
@@ -10,32 +9,33 @@ import { login, logout } from "./slices/authSlice"
 import Login from "./pages/Login";
 import Home from './pages/Home';
 import NetflixShowPage from './components/NetflixShowPage';
-// Simple Navbar
-
-
-// Simple Home Component
-<Home/>
-
-// Main App
-// Make sure this exists and is default exported
 
 function App() {
+  // Get token from Redux store (adjust the path based on your authSlice structure)
+  const token = useSelector(state => state.auth.token); // or however you store the token in your auth slice
+  
   return (
     <div className="app">
       <BrowserRouter>
         <Navbar />
         <Routes>
+          {/* Always allow access to home, login, and signup */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/show/:id" element={<NetflixShowPage />} />
           
-
-<Route path="/buy" element={<PaymentPage />} />
-
+          {/* Protected routes - only render if token exists */}
+          {token ? (
+            <>
+              <Route path="/show/:id" element={<NetflixShowPage />} />
+              <Route path="/buy" element={<PaymentPage />} />
+            </>
+          ) : null}
+          
+          {/* Catch-all route - redirect to home if no token or route not found */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
-
 
       <style jsx global>{`
         * {
@@ -53,8 +53,6 @@ function App() {
         .app {
           min-height: 100vh;
         }
-
-        
 
         .logo {
           color: #e50914;
@@ -120,8 +118,6 @@ function App() {
         .cta-btn:hover {
           background: #f40612;
         }
-
-       
 
         .hero-banner {
           height: 400px;

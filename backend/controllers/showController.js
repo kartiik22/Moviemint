@@ -47,12 +47,12 @@ const getShows = async (req, res) => {
 
 const getShowById = async (req, res) => {
   console.log("🎬 getShowById: Called");
-  console.log("🎬 getShowById: req.params.id =", req.params.id);
-  console.log("🎬 getShowById: req.user =", req.user);
+  //console.log("🎬 getShowById: req.params.id =", req.params.id);
+  //console.log("🎬 getShowById: req.user =", req.user);
 
   const showId = req.params.id;
   const adminKey = req.header("x-admin-key");
-  console.log("🎬 getShowById: x-admin-key header =", adminKey);
+  //console.log("🎬 getShowById: x-admin-key header =", adminKey);
 
   try {
     let show;
@@ -65,9 +65,9 @@ const getShowById = async (req, res) => {
 
     // Authenticated user with JWT middleware
     else if (req.user?.userId) {
-      console.log("🔐 JWT Authenticated User:", req.user.userId);
+      //console.log("🔐 JWT Authenticated User:", req.user.userId);
       const user = await User.findById(req.user.userId);
-      console.log("📦 User from DB:", user);
+      //console.log("📦 User from DB:", user);
 
       // Check if subscription is still valid (within 30 days)
       if (user?.isPaid && user?.subscriptionTime) {
@@ -109,7 +109,7 @@ const getShowById = async (req, res) => {
       return res.status(404).json({ message: "Show not found" });
     }
 
-    console.log("🎬 Final Show Response:", show);
+    //console.log("🎬 Final Show Response:");
     res.status(200).json(show);
 
   } catch (error) {

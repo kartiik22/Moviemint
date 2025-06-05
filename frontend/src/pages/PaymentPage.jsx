@@ -90,7 +90,7 @@ const SubscriptionPage = () => {
 
       // 2. Configure Razorpay options
       const options = {
-        key: "rzp_test_iq3XMe66YUCq07", // Replace with your actual Razorpay key or use env variable
+        key: process.env.REACT_APP_RAZORPAY_KEY,
         amount: order.amount,
         currency: "INR",
         name: "MOVIEMINT",
@@ -591,10 +591,7 @@ const SubscriptionPage = () => {
         }
       `}</style>
 
-      <div className="header">
-        <div className="logo">MOVIEMINT</div>
-      </div>
-
+     
       <div className="subscription-container">
         <h1 className="subscription-title">Choose Your Plan</h1>
         <p className="subscription-subtitle">Unlimited access to all premium content</p>

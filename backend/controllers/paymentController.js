@@ -3,14 +3,14 @@ const crypto = require("crypto");
 const User = require("../models/User");
 
 const razorpay = new Razorpay({
-  key_id: "rzp_test_iq3XMe66YUCq07",
-  key_secret: "yF6BlaYSzMnxucE1HHnS9Dtv",
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
 const createOrder = async (req, res) => {
   try {
     const options = {
-      amount: 9900, // in paise (₹99)
+      amount: process.env.SUBSCRIPTION_AMOUNT || 9900, // in paise (₹99 default)
       currency: "INR",
       receipt: "receipt#1",
     };
@@ -30,7 +30,7 @@ const verifyPayment = async (req, res) => {
   const userId = req.user.userId;
 
   const hmac = crypto
-    .createHmac("sha256", "yF6BlaYSzMnxucE1HHnS9Dtv")
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
     .update(razorpay_order_id + "|" + razorpay_payment_id)
     .digest("hex");
 
