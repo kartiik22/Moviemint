@@ -5,35 +5,13 @@ import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-do
 import { useSelector, useDispatch } from "react-redux"
 import axios from "axios"
 import PaymentPage from "./pages/PaymentPage";
-
+import Navbar from './components/Navbar';
 import { login, logout } from "./slices/authSlice"
 import Login from "./pages/Login";
 import Home from './pages/Home';
 import NetflixShowPage from './components/NetflixShowPage';
 // Simple Navbar
-const Navbar = () => {
-  const token = useSelector((state) => state.auth.token)
-  const dispatch = useDispatch()
 
-  return (
-    <nav className="navbar">
-      <Link to="/" className="logo">
-        NETFLIX
-      </Link>
-      <div className="nav-right">
-        {!token ? (
-          <Link to="/login" className="sign-in-btn">
-            Sign In
-          </Link>
-        ) : (
-          <button onClick={() => dispatch(logout())} className="logout-btn">
-            Sign Out
-          </button>
-        )}
-      </div>
-    </nav>
-  )
-}
 
 // Simple Home Component
 <Home/>
@@ -76,18 +54,7 @@ function App() {
           min-height: 100vh;
         }
 
-        /* Navbar */
-        .navbar {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 20px 50px;
-          background: rgba(0,0,0,0.9);
-          position: fixed;
-          width: 100%;
-          top: 0;
-          z-index: 100;
-        }
+        
 
         .logo {
           color: #e50914;
@@ -154,11 +121,7 @@ function App() {
           background: #f40612;
         }
 
-        /* Home Page */
-        .home {
-          padding-top: 80px;
-          min-height: 100vh;
-        }
+       
 
         .hero-banner {
           height: 400px;

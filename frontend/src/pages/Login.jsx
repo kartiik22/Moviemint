@@ -34,9 +34,7 @@ const Login = () => {
     <div className="login-container">
       <div className="login-background">
         <div className="login-overlay">
-          <div className="login-header">
-            <h1 className="netflix-logo">NETFLIX</h1>
-          </div>
+         
 
           <div className="login-form-container">
             <div className="login-form-wrapper">
@@ -71,10 +69,7 @@ const Login = () => {
               </form>
 
               <div className="login-help">
-                <div className="remember-me">
-                  <input type="checkbox" id="remember" />
-                  <label htmlFor="remember">Remember me</label>
-                </div>
+               
                 <a href="#" className="help-link">
                   Need help?
                 </a>

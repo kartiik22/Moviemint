@@ -35,10 +35,7 @@ const Signup = () => {
     <div className="signup-container">
       <div className="signup-background">
         <div className="signup-overlay">
-          <div className="signup-header">
-            <h1 className="netflix-logo">NETFLIX</h1>
-          </div>
-
+        
           <div className="signup-form-container">
             <div className="signup-form-wrapper">
               <h2 className="signup-title">Create Account</h2>

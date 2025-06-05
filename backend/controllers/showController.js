@@ -48,6 +48,8 @@ const getShows = async (req, res) => {
 };
 
 // Get single show by ID (include url field for all users)
+
+
 const getShowById = async (req, res) => {
   console.log("🎬 getShowById: Called");
   console.log("🎬 getShowById: req.params.id =", req.params.id);
@@ -60,45 +62,48 @@ const getShowById = async (req, res) => {
   try {
     let show;
 
+    // Admin bypass (if admin key matches)
     if (adminKey && adminKey === process.env.ADMIN_KEY) {
-      console.log("🎬 getShowById: Admin access granted");
+      console.log("✅ Admin access: Full show");
       show = await Show.findById(showId);
-    } else if (req.user?.isPaid) {
-      // Problem: your middleware sets req.user.userId but not req.user.isPaid
-      // So maybe fetch user from DB to check isPaid flag:
-      console.log("🎬 getShowById: Paid user detected, userId:", req.user.userId);
-      
-      // Fetch user from DB to get latest isPaid value
-      const userFromDb = await User.findById(req.user.userId);
-      console.log("🎬 getShowById: User from DB:", userFromDb);
+    }
 
-      if (userFromDb?.isPaid) {
+    // Authenticated user with JWT middleware
+    else if (req.user?.userId) {
+      console.log("🔐 JWT Authenticated User:", req.user.userId);
+      const user = await User.findById(req.user.userId);
+      console.log("📦 User from DB:", user);
+
+      if (user?.isPaid) {
+        console.log("💰 Paid user: Full access");
         show = await Show.findById(showId);
       } else {
-        console.log("🎬 getShowById: User is NOT paid");
+        console.log("❌ Unpaid user: Hiding URL");
         show = await Show.findById(showId).select("-url");
       }
-    } else {
-      console.log("🎬 getShowById: Unpaid or no user, hiding URL");
+    }
+
+    // Unauthenticated or invalid
+    else {
+      console.log("❗ No valid user or token: Hiding URL");
       show = await Show.findById(showId).select("-url");
     }
 
     if (!show) {
-      console.log("🎬 getShowById: Show not found");
+      console.log("🚫 Show not found");
       return res.status(404).json({ message: "Show not found" });
     }
 
-    console.log("🎬 getShowById: Show found:", show);
-    console.log("🎬 getShowById: Show URL:", show.url);
-
+    console.log("🎬 Final Show Response:", show);
     res.status(200).json(show);
+
   } catch (error) {
-    console.error("🎬 getShowById: Server error:", error);
+    console.error("💥 Error in getShowById:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-
+module.exports = { getShowById };
 
 // Create a new show (admin only)
 const createShow = async (req, res) => {

@@ -44,11 +44,12 @@ function NetflixShowPage() {
       const token = localStorage.getItem("token") // or from Redux if you're using that
   
       const response = await fetch(`http://localhost:4000/api/shows/${id}`, {
+        method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`, // ✅ REQUIRED
           "Content-Type": "application/json",
         },
-      })
+      });
   
       if (!response.ok) {
         throw new Error("Failed to fetch show")
