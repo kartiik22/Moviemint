@@ -20,7 +20,7 @@ const SubscriptionPage = () => {
       }
 
       console.log("Token found, making API call...")
-      const response = await fetch("http://localhost:4000/api/auth/me", {
+      const response = await fetch("https://net-1-fxsl.onrender.com/api/auth/me", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -66,7 +66,7 @@ const SubscriptionPage = () => {
   const handlePayment = async () => {
     try {
       // 1. Create Razorpay order from backend
-      const res = await fetch("http://localhost:4000/api/payment/create-order", {
+      const res = await fetch("https://net-1-fxsl.onrender.com/api/payment/create-order", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -99,7 +99,7 @@ const SubscriptionPage = () => {
         handler: async (response) => {
           try {
             // 3. Verify Payment
-            const verifyRes = await fetch("http://localhost:4000/api/payment/verify", {
+            const verifyRes = await fetch("https://net-1-fxsl.onrender.com/api/payment/verify", {
               method: "POST",
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
