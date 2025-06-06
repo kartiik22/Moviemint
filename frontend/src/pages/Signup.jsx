@@ -17,7 +17,7 @@ const Signup = () => {
     setLoading(true)
   
     try {
-      await axios.post("http://localhost:4000/api/auth/signup", { email, password })
+      await axios.post("https://net-1-fxsl.onrender.com/api/auth/signup", { email, password })
       navigate("/login")
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
