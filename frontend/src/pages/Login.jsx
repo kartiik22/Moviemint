@@ -20,7 +20,7 @@ const Login = () => {
     setLoading(true)
 
     try {
-      const { data } = await axios.post("http://localhost:4000/api/auth/login", { email, password })
+      const { data } = await axios.post("https://net-1-fxsl.onrender.com/api/auth/login", { email, password })
       dispatch(login(data.token))
       navigate("/")
     } catch (error) {
