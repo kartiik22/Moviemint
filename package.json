@@ -3,11 +3,11 @@
     "version": "1.0.0",
     "main": "server.js",
     "scripts": {
-      "install-server": "cd server && npm install",
-      "start-server": "cd server && npm start",
-      "install-client": "cd client && npm install",
-      "build-client": "cd client && npm run build",
-      "start-client": "cd client && npm run start"
+      "install-server": "cd backend && npm install",
+      "start-server": "cd backend && npm start",
+      "install-client": "cd frontend && npm install",
+      "build-client": "cd frontend && npm run build",
+      "start-client": "cd frontend && npm run start"
     },
     "author": "Kartik",
     "license": "ISC",
