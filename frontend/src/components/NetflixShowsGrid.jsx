@@ -86,7 +86,7 @@ function NetflixShowsGrid() {
   const fetchShows = async () => {
     try {
       setLoading(true)
-      const response = await fetch("http://localhost:4000/api/shows")
+      const response = await fetch("https://net-1-fxsl.onrender.com/api/shows")
       if (!response.ok) {
         throw new Error("Failed to fetch shows")
       }
@@ -122,7 +122,7 @@ function NetflixShowsGrid() {
         const batchPromises = batch.map(async (show) => {
           try {
             // Replace with actual API endpoint for each show's rating
-            const response = await fetch(`http://localhost:4000/api/shows/${show._id}/rating`)
+            const response = await fetch(`https://net-1-fxsl.onrender.com/${show._id}/rating`)
             
             if (response.ok) {
               const ratingData = await response.json()
