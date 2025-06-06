@@ -34,7 +34,7 @@ const Navbar = () => {
   const fetchUserInfo = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:4000/api/auth/me", {
+      const response = await fetch("https://net-1-fxsl.onrender.com/api/auth/me", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
