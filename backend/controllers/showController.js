@@ -1,8 +1,10 @@
 const Show = require("../models/showModel");
 const User = require("../models/User");
+const connectDB = require("../config/db");
 
 const getShows = async (req, res) => {
   try {
+    await connectDB(process.env.MONGO_URI);
     const adminKey = req.header("x-admin-key");
     const authHeader = req.header("Authorization");
     let shows;

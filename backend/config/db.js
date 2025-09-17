@@ -7,14 +7,14 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
 
-const connectDB = async () => {
+const connectDB = async (uri) => {
   if (cached.conn) {
     return cached.conn; // Return existing connection if available
   }
 
   if (!cached.promise) {
     // Create new connection promise if not already connecting
-    cached.promise = mongoose.connect(process.env.MONGO_URI, {
+    cached.promise = mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }).then((mongoose) => mongoose);

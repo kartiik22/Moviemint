@@ -1,6 +1,7 @@
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const User = require("../models/User");
+const connectDB = require("../config/db");
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -9,6 +10,7 @@ const razorpay = new Razorpay({
 
 const createOrder = async (req, res) => {
   try {
+    await connectDB(process.env.MONGO_URI);
     const options = {
       amount: process.env.SUBSCRIPTION_AMOUNT || 9900, // in paise (₹99 default)
       currency: "INR",
