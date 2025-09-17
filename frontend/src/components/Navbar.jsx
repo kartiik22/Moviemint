@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { logout } from "../slices/authSlice";
+import config from '../config/config';
 
 const Navbar = () => {
   const token = useSelector((state) => state.auth.token);
@@ -34,7 +35,7 @@ const Navbar = () => {
   const fetchUserInfo = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://net-1-fxsl.onrender.com/api/auth/me", {
+      const response = await fetch(`${config.BACKEND_URL}/api/auth/me`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,

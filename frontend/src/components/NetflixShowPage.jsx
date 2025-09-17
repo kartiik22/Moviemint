@@ -1,8 +1,7 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import ReactPlayer from "react-player"
+import config from '../config/config'
 
 // Icon components
 const StarIcon = () => (
@@ -43,7 +42,7 @@ function NetflixShowPage() {
       // Get the token from localStorage or your Redux state
       const token = localStorage.getItem("token") // or from Redux if you're using that
   
-      const response = await fetch(`https://net-1-fxsl.onrender.com/api/shows/${id}`, {
+      const response = await fetch(`${config.BACKEND_URL}/api/shows/${id}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`, // ✅ REQUIRED

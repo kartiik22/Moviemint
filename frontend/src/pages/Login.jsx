@@ -1,12 +1,11 @@
-"use client"
-
+import axios from "axios"
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import axios from "axios"
 import { login } from "../slices/authSlice"
 import { useNavigate, Link } from "react-router-dom"
-import { useSelector } from "react-redux";
+import { useSelector } from "react-redux"
 import Home from "./Home"
+import config from '../config/config'
 
 const Login = () => {
   const [email, setEmail] = useState("")
@@ -20,7 +19,7 @@ const Login = () => {
     setLoading(true)
 
     try {
-      const { data } = await axios.post("https://net-1-fxsl.onrender.com/api/auth/login", { email, password })
+      const { data } = await axios.post(`${config.BACKEND_URL}/api/auth/login`, { email, password })
       dispatch(login(data.token))
       navigate("/")
     } catch (error) {

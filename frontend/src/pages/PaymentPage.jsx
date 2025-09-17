@@ -1,6 +1,6 @@
-"use client"
-
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import config from '../config/config';
 
 const SubscriptionPage = () => {
   const [isPaid, setIsPaid] = useState(null)
@@ -20,7 +20,7 @@ const SubscriptionPage = () => {
       }
 
       console.log("Token found, making API call...")
-      const response = await fetch("https://net-1-fxsl.onrender.com/api/auth/me", {
+      const response = await fetch(`${config.BACKEND_URL}/api/auth/me`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -66,7 +66,7 @@ const SubscriptionPage = () => {
   const handlePayment = async () => {
     try {
       // 1. Create Razorpay order from backend
-      const res = await fetch("https://net-1-fxsl.onrender.com/api/payment/create-order", {
+      const res = await fetch(`${config.BACKEND_URL}/api/payment/create-order`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -99,7 +99,7 @@ const SubscriptionPage = () => {
         handler: async (response) => {
           try {
             // 3. Verify Payment
-            const verifyRes = await fetch("https://net-1-fxsl.onrender.com/api/payment/verify", {
+            const verifyRes = await fetch(`${config.BACKEND_URL}/api/payment/verify`, {
               method: "POST",
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
