@@ -8,8 +8,8 @@ import Home from "./Home"
 import config from '../config/config'
 
 const Login = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("user1@gmail.com")
+  const [password, setPassword] = useState("Pass@123")
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()

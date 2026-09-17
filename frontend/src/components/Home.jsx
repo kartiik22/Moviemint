@@ -18,7 +18,7 @@ const Home = () => {
             <p className="netflix-subtitle">
               Watch anywhere. Cancel anytime.
             </p>
-            <Link to="/signup" className="cta-btn netflix-cta">
+            <Link to="/login" className="cta-btn netflix-cta">
               Get Started
             </Link>
           </div>
