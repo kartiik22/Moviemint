@@ -67,6 +67,8 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const isUserPaid = (info) => info?.isPaid === true || info?.ispaid === true;
+
   return (
     <>
       {/* Google Fonts Import */}
@@ -245,8 +247,8 @@ const Navbar = () => {
                 )}
 
                 {/* Subscription Status */}
-                {!loading && userInfo && (
-                  userInfo.ispaid ? (
+                {!loading && (
+                  isUserPaid(userInfo) ? (
                     <div style={{
                       background: "linear-gradient(135deg, #28a745, #20c997)",
                       color: "white",
@@ -362,8 +364,8 @@ const Navbar = () => {
             gap: "12px"
           }}>
             {/* Mobile Quick Subscription Status */}
-            {!loading && userInfo && (
-              userInfo.ispaid ? (
+            {!loading && (
+              isUserPaid(userInfo) ? (
                 <div style={{
                   background: "linear-gradient(135deg, #28a745, #20c997)",
                   color: "white",
@@ -571,7 +573,7 @@ const Navbar = () => {
             )}
 
             {/* Mobile Subscription Status */}
-            {!loading && userInfo && !userInfo.ispaid && (
+            {!loading && !isUserPaid(userInfo) && (
               <Link 
                 to="/buy" 
                 onClick={closeMobileMenu}

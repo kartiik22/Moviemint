@@ -2,6 +2,10 @@ const Show = require("../models/showModel");
 const User = require("../models/User");
 const connectDB = require("../config/db");
 
+const EXCLUDED_SHOW_IDS = ["6840199a7ad3bd0434113db0"];
+
+const isExcludedShow = (id) => EXCLUDED_SHOW_IDS.includes(String(id));
+
 const getShows = async (req, res) => {
   try {
     await connectDB(process.env.MONGO_URI);
@@ -11,7 +15,7 @@ const getShows = async (req, res) => {
 
     // ✅ 1. Admin user — full access
     if (adminKey && adminKey === process.env.ADMIN_KEY) {
-      shows = await Show.find(); // include all fields
+      shows = await Show.find({ _id: { $nin: EXCLUDED_SHOW_IDS } });
       return res.status(200).json(shows);
     }
 
@@ -25,9 +29,9 @@ const getShows = async (req, res) => {
         const user = await User.findById(decoded.userId);
 
         if (user && user.isPaid) {
-          shows = await Show.find(); // full access
+          shows = await Show.find({ _id: { $nin: EXCLUDED_SHOW_IDS } });
         } else {
-          shows = await Show.find().select("-url"); // hide video URL
+          shows = await Show.find({ _id: { $nin: EXCLUDED_SHOW_IDS } }).select("-url");
         }
 
         return res.status(200).json(shows);
@@ -38,7 +42,7 @@ const getShows = async (req, res) => {
     }
 
     // ❌ 3. Not logged in — hide URL
-    shows = await Show.find().select("-url");
+    shows = await Show.find({ _id: { $nin: EXCLUDED_SHOW_IDS } }).select("-url");
     return res.status(200).json(shows);
 
   } catch (error) {
@@ -55,6 +59,10 @@ const getShowById = async (req, res) => {
   const showId = req.params.id;
   const adminKey = req.header("x-admin-key");
   //console.log("🎬 getShowById: x-admin-key header =", adminKey);
+
+  if (isExcludedShow(showId)) {
+    return res.status(404).json({ message: "Show not found" });
+  }
 
   try {
     let show;

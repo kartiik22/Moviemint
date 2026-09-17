@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import ReactPlayer from "react-player"
-import config from '../config/config'
+import config, { isExcludedShow } from '../config/config'
 
 // Icon components
 const StarIcon = () => (
@@ -32,6 +32,11 @@ function NetflixShowPage() {
 
   useEffect(() => {
     if (id) {
+      if (isExcludedShow(id)) {
+        setError("Show not found")
+        setLoading(false)
+        return
+      }
       fetchShow()
       fetchPaymentStatus()
     }

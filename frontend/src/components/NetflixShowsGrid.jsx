@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import config from '../config/config'
+import config, { isExcludedShow } from '../config/config'
 
 // Professional icon components
 const SearchIcon = () => (
@@ -92,13 +92,12 @@ function NetflixShowsGrid() {
         throw new Error("Failed to fetch shows")
       }
       const data = await response.json()
+      const visibleShows = data.filter((show) => !isExcludedShow(show._id))
       
-      // Set initial data
-      setShows(data)
-      setFilteredShows(data)
+      setShows(visibleShows)
+      setFilteredShows(visibleShows)
       
-      // Fetch ratings for each show
-      fetchRatingsForShows(data)
+      fetchRatingsForShows(visibleShows)
     } catch (err) {
       setError("Failed to load shows. Please try again later.")
       console.error("Error fetching shows:", err)
