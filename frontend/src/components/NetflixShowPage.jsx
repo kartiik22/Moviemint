@@ -28,12 +28,43 @@ function NetflixShowPage() {
   const [show, setShow] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [isPaid, setIsPaid] = useState(null)
 
   useEffect(() => {
     if (id) {
       fetchShow()
+      fetchPaymentStatus()
     }
   }, [id])
+
+  const fetchPaymentStatus = async () => {
+    try {
+      const token = localStorage.getItem("token")
+      if (!token) {
+        setIsPaid(false)
+        return
+      }
+
+      const response = await fetch(`${config.BACKEND_URL}/api/auth/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (!response.ok) {
+        setIsPaid(false)
+        return
+      }
+
+      const data = await response.json()
+      setIsPaid(data.isPaid === true || data.ispaid === true)
+    } catch (err) {
+      console.error("Error fetching payment status:", err)
+      setIsPaid(false)
+    }
+  }
 
   const fetchShow = async () => {
     try {
@@ -288,6 +319,60 @@ function NetflixShowPage() {
       lineHeight: "1.6",
       fontSize: "16px",
     },
+    paywallSection: {
+      backgroundColor: "rgba(0, 0, 0, 0.75)",
+      border: "2px solid #E50914",
+      borderRadius: "12px",
+      padding: "48px 32px",
+      textAlign: "center",
+      marginBottom: "48px",
+      backdropFilter: "blur(10px)",
+    },
+    paywallIcon: {
+      fontSize: "48px",
+      marginBottom: "20px",
+    },
+    paywallTitle: {
+      fontSize: "28px",
+      fontWeight: "700",
+      color: "white",
+      marginBottom: "12px",
+    },
+    paywallSubtitle: {
+      fontSize: "16px",
+      color: "#cccccc",
+      marginBottom: "32px",
+      lineHeight: "1.5",
+      maxWidth: "480px",
+      margin: "0 auto 32px",
+    },
+    subscribeButton: {
+      display: "inline-block",
+      backgroundColor: "#E50914",
+      color: "white",
+      textDecoration: "none",
+      padding: "16px 40px",
+      borderRadius: "4px",
+      fontSize: "18px",
+      fontWeight: "700",
+      transition: "all 0.2s ease",
+      boxShadow: "0 4px 12px rgba(229, 9, 20, 0.3)",
+    },
+    paywallFeatures: {
+      listStyle: "none",
+      padding: 0,
+      margin: "24px auto 0",
+      maxWidth: "320px",
+      textAlign: "left",
+    },
+    paywallFeature: {
+      padding: "8px 0",
+      color: "#cccccc",
+      fontSize: "14px",
+      display: "flex",
+      alignItems: "center",
+      gap: "10px",
+    },
   }
 
   if (loading) {
@@ -382,8 +467,8 @@ function NetflixShowPage() {
 
         {/* Content Section */}
         <div style={styles.contentSection} className="content-section">
-          {/* Video Player Section */}
-          {show.url && (
+          {/* Video Player or Paywall Section */}
+          {isPaid === true && show.url ? (
             <div style={styles.videoSection} className="video-section">
               <h2 style={styles.videoTitle} className="video-title">
                 Watch Now
@@ -430,7 +515,43 @@ function NetflixShowPage() {
                 />
               </div>
             </div>
-          )}
+          ) : isPaid === false ? (
+            <div style={styles.paywallSection} className="paywall-section">
+              <div style={styles.paywallIcon}>🔒</div>
+              <h2 style={styles.paywallTitle}>You have to pay to watch movies</h2>
+              <p style={styles.paywallSubtitle}>
+                Subscribe to MOVIEMINT Premium to unlock unlimited streaming of all movies and TV shows.
+              </p>
+              <Link
+                to="/buy"
+                style={styles.subscribeButton}
+                className="subscribe-button"
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "#f40612"
+                  e.target.style.transform = "translateY(-2px)"
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "#E50914"
+                  e.target.style.transform = "translateY(0)"
+                }}
+              >
+                Subscribe Now — ₹99/month
+              </Link>
+              <ul style={styles.paywallFeatures}>
+                {[
+                  "Unlimited access to all videos",
+                  "Watch on any device",
+                  "HD available",
+                  "Cancel anytime",
+                ].map((feature) => (
+                  <li key={feature} style={styles.paywallFeature}>
+                    <span style={{ color: "#E50914", fontWeight: "bold" }}>✓</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
 
           {/* Info Cards Grid */}
           <div style={styles.contentGrid} className="content-grid">
@@ -502,7 +623,7 @@ function NetflixShowPage() {
               gap: 24px !important;
             }
 
-            .info-card, .video-section {
+            .info-card, .video-section, .paywall-section {
               padding: 24px !important;
             }
 
@@ -563,7 +684,7 @@ function NetflixShowPage() {
               gap: 16px !important;
             }
 
-            .info-card, .video-section {
+            .info-card, .video-section, .paywall-section {
               padding: 20px !important;
             }
 
